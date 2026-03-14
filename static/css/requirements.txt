@@ -1,2 +1,4 @@
+echo flask==3.0.0 > requirements.txt
+echo gunicorn==21.2.0 >> requirements.txtdi
 flask==3.0.0
 gunicorn==21.2.0
