@@ -1,0 +1,202 @@
+/* remove default margin and padding from all elements */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* CSS variables — define colors once, use everywhere */
+:root {
+  --bg: #0f0f0f;        /* page background — dark black */
+  --surface: #1a1a1a;   /* card background — slightly lighter */
+  --border: #2e2e2e;    /* border color */
+  --accent: #c8f135;    /* highlight color — yellow green */
+  --text: #f0f0f0;      /* main text — white */
+  --text-muted: #777;   /* secondary text — gray */
+  --text-faint: #444;   /* very faded text */
+  --danger: #ff5c5c;    /* delete button color — red */
+  --radius: 14px;       /* rounded corners size */
+}
+
+/* overall page style */
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;         /* full screen height */
+  display: flex;
+  justify-content: center;   /* center content horizontally */
+  padding: 48px 16px 80px;
+}
+
+/* main content wrapper, max width 560px */
+.page { width: 100%; max-width: 560px; }
+
+header { margin-bottom: 24px; }
+
+/* header row with title and count badge */
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* pushes items to opposite ends */
+  margin-bottom: 20px;
+}
+
+/* "my tasks" heading */
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--accent);  /* yellow-green color */
+  letter-spacing: -1px;
+}
+
+/* "2/5 done" pill badge */
+.stat-chip {
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 5px 12px;
+  border-radius: 99px; /* pill shape */
+}
+
+/* add task form row */
+.add-form { display: flex; gap: 10px; }
+
+/* text input styling */
+.add-form input {
+  flex: 1;                       /* takes all remaining width */
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  font-size: 15px;
+  color: var(--text);
+  outline: none;
+  transition: border-color .2s;  /* smooth border color change */
+  font-family: 'DM Sans', sans-serif;
+}
+.add-form input::placeholder { color: var(--text-faint); }
+.add-form input:focus { border-color: var(--accent); } /* green border when focused */
+
+/* + add button */
+.add-form button {
+  width: 50px; height: 50px;
+  border-radius: var(--radius);
+  background: var(--accent);  /* yellow-green background */
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: #0f0f0f;             /* dark text on bright button */
+  transition: background .15s, transform .1s;
+}
+.add-form button:hover { background: #d4f54a; }
+.add-form button:active { transform: scale(.96); } /* slight shrink on click */
+
+/* filter buttons row */
+.filter-bar { display: flex; gap: 6px; margin-bottom: 24px; }
+
+.filter-btn {
+  text-decoration: none;
+  font-size: 13px; font-weight: 500;
+  padding: 6px 16px;
+  border-radius: 99px;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  transition: all .15s;
+}
+.filter-btn:hover { color: var(--text); border-color: #555; }
+/* active filter gets green background */
+.filter-btn.active { background: var(--accent); color: #0f0f0f; border-color: var(--accent); }
+
+/* tasks list container */
+.task-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+/* individual task card */
+.task-item {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  transition: border-color .15s;
+  animation: slideIn .2s ease; /* smooth entrance animation */
+}
+.task-item:hover { border-color: #3a3a3a; }
+
+/* slide in from top animation when task is added */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* check circle button to complete/uncomplete a task */
+.check-btn {
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none;
+  font-size: 13px;
+  color: #0f0f0f;
+  flex-shrink: 0;
+  transition: all .15s;
+}
+.check-btn:hover { border-color: var(--accent); }
+/* completed task gets green filled check button */
+.task-item.completed .check-btn { background: var(--accent); border-color: var(--accent); }
+
+/* task text */
+.task-title { flex: 1; font-size: 15px; color: var(--text); }
+/* completed task text gets strikethrough and faded */
+.task-item.completed .task-title { color: var(--text-faint); text-decoration: line-through; }
+
+/* delete button — only visible on hover */
+.delete-btn {
+  color: var(--text-faint);
+  text-decoration: none;
+  padding: 4px; border-radius: 6px;
+  font-size: 13px;
+  opacity: 0;           /* invisible by default */
+  transition: all .15s;
+}
+.task-item:hover .delete-btn { opacity: 1; } /* visible when hovering the task */
+.delete-btn:hover { color: var(--danger); background: rgba(255,92,92,.1); }
+
+.footer-actions { margin-top: 20px; text-align: right; }
+.clear-btn { font-size: 13px; color: var(--text-muted); text-decoration: none; }
+.clear-btn:hover { color: var(--danger); }
+
+/* message shown when no tasks exist */
+.empty-state { text-align: center; padding: 64px 0; color: var(--text-faint); font-size: 14px; }
+```
+
+Press **Ctrl+S** to save.
+
+---
+
+## Step 3 — Run Locally
+
+In VS Code terminal:
+```
+pip install flask gunicorn
+python app.py
+```
+
+Open browser → `http://127.0.0.1:5000`
+
+If app is working → press **Ctrl+C** in terminal to stop.
+
+---
+
+## Step 4 — Push to GitHub
+```
+git init
+git add .
+git commit -m "todo app complete"
+```
+
+Go to **github.com** → New Repository → name: `todo-app` → Public → Create
+
+Copy the repo URL, then run:
+```
+git remote add origin https://github.com/YOUR_USERNAME/todo-app.git
+git branch -M main
+git push -u origin main

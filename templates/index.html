@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!-- tells browser this is an HTML file -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- supports all characters properly -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- makes the page look good on mobile -->
+  <title>To-Do List</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+  <!-- connects our style.css file -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <!-- loads Google Fonts for better typography -->
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="header-top">
+      <h1>my tasks</h1>
+      <!-- page heading -->
+      <span class="stat-chip">{{ done_count }}/{{ total }} done</span>
+      <!-- shows how many tasks are done, data comes from Flask -->
+    </div>
+
+    <form action="/add" method="POST" class="add-form">
+      <!-- when submitted, goes to /add route in app.py -->
+      <input type="text" name="title" placeholder="Add a new task..." autocomplete="off" required />
+      <!-- text box where user types the task -->
+      <button type="submit">+</button>
+      <!-- submit button -->
+    </form>
+  </header>
+
+  <nav class="filter-bar">
+    <!-- three filter buttons -->
+    <a href="/?filter=all" class="filter-btn {% if filter_by == 'all' %}active{% endif %}">All</a>
+    <!-- if filter_by is 'all', adds active class to highlight this button -->
+    <a href="/?filter=active" class="filter-btn {% if filter_by == 'active' %}active{% endif %}">Active</a>
+    <a href="/?filter=done" class="filter-btn {% if filter_by == 'done' %}active{% endif %}">Done</a>
+  </nav>
+
+  <main>
+    {% if tasks %}
+    <!-- only show task list if there are tasks -->
+      <ul class="task-list">
+        {% for task in tasks %}
+        <!-- loop through every task from Flask -->
+        <li class="task-item {% if task.done %}completed{% endif %}">
+          <!-- if task.done == 1, adds 'completed' class for strikethrough style -->
+
+          <a href="/toggle/{{ task.id }}" class="check-btn">
+            <!-- clicking this marks task complete or incomplete -->
+            {% if task.done %}✓{% endif %}
+            <!-- shows tick only if task is done -->
+          </a>
+
+          <span class="task-title">{{ task.title }}</span>
+          <!-- displays the task text -->
+
+          <a href="/delete/{{ task.id }}" class="delete-btn">✕</a>
+          <!-- clicking this deletes the task -->
+        </li>
+        {% endfor %}
+      </ul>
+
+      {% if done_count > 0 %}
+      <!-- show clear button only if there are completed tasks -->
+      <div class="footer-actions">
+        <a href="/clear_done" class="clear-btn">Clear completed</a>
+      </div>
+      {% endif %}
+
+    {% else %}
+    <!-- if no tasks exist, show this message -->
+      <div class="empty-state">
+        <p>No tasks yet. Add one above!</p>
+      </div>
+    {% endif %}
+  </main>
+
+</div>
+</body>
+</html>
