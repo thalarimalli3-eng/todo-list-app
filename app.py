@@ -1,10 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
-app = Flask(__name__)
 
-with app.app_context():
-    init_db() 
-    
 app = Flask(__name__)
 DB_PATH = "todo.db"
 
@@ -25,6 +21,9 @@ def init_db():
     """)
     conn.commit()
     conn.close()
+
+with app.app_context():
+    init_db()
 
 @app.route("/")
 def index():
@@ -77,15 +76,4 @@ def clear_done():
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True)
-    if __name__ == "__main__":
-    init_db()
-    app.run(debug=True)
-    pp = Flask(__name__)
-
-with app.app_context():
-    init_db()
-
-    
-    
